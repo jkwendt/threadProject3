@@ -13,7 +13,7 @@ namespace threadProject3
         public static void Main()
         {
           
-            int [] myArray = {21, 15, 7,37, 23, 90, 51, 84, 43, 61, 60, 27, 76, 24, 86, 3};
+            int [] myArray = {21, 15, 7,37, 23, 90, 51, 87, 43, 61, 60, 27, 76, 24, 86, 3};
             printArray(myArray);
             Thread originalQuickSortThread = new Thread(quickSort);
             System.Console.WriteLine("Sorting Array");
@@ -126,14 +126,7 @@ namespace threadProject3
        public int [] Array{set;get;}
         public int Upper{set; get;}
         public int Lower{set;get;} 
-       public int partition(int[] arr, int lower, int upper)
-         {
-          return Class1.partition(arr, lower, upper);
-        }
 
-        /*public void Range{
-            
-        }*/
     }
 }
 
