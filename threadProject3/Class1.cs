@@ -19,13 +19,13 @@ namespace threadProject3
             printArray(myArray);
             Thread originalQuickSortThread = new Thread(quickSort);
             
-                printArray(myArray, (myArray.Length-1), 0, false);
+             //  printArray(myArray, (myArray.Length-1), 0, false); 
 
             originalQuickSortThread.Start(new Range{Array = myArray, Lower = 0, Upper = myArray.Length-1});
             originalQuickSortThread.Join();
 
-                printArray(myArray, (myArray.Length-1), 0, true);
-
+               // printArray(myArray, (myArray.Length-1), 0, true);
+           
             System.Console.WriteLine("\nThe Sorted Array is");
             printArray(myArray);
             
@@ -116,9 +116,9 @@ namespace threadProject3
                 lowerThread.Join();
                 upperThread.Join();
 
-                
+                printArray(arr, upper, lower, true);
             }
-
+           // printArray(arr, upper, lower, true);
         }
         public static int partition(int[] arr, int lower, int upper)
         {
@@ -126,8 +126,8 @@ namespace threadProject3
             int pivotIndex = upper + (lower - upper) / 2;
             int pivotValue = arr[pivotIndex];
 
-                printArray(arr, pivotIndex, lower, false);
- 
+               // printArray(arr, pivotIndex, lower, false);
+            printArray(arr, upper, lower, false);
             Swap(arr, upper, pivotIndex);
 
             int Index = lower;
@@ -143,7 +143,8 @@ namespace threadProject3
 
             Swap(arr, Index, upper);
 
-                printArray(arr, pivotIndex, lower, true);
+               // printArray(arr, pivotIndex, lower, true);
+           //printArray(arr, upper, lower, true);
 
             return Index;
         }
