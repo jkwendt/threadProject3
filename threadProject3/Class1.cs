@@ -79,58 +79,23 @@ namespace threadProject3
             int upper = range.Upper;
             if(lower < upper ) //echo entire array |White [blue] white|
             {
-                /*lock (lockObject)
-                {
-                    System.Console.Write("Begin sort of " + lower + "->" + upper + ": ");
 
-                    printArray(arr, upper, lower);
-                    System.Console.WriteLine(" ");
-                    Console.ResetColor();
-                }*/
                 int pivot = partition(arr, lower, upper);
-                /*lock (lockObject)
-                {
-                    System.Console.Write("Begin sort of " + lower + "->" + pivot + ": ");
 
-                    printArray(arr, pivot, lower);
-                    System.Console.WriteLine(" ");
-                    Console.ResetColor();
-                }*/
                 Thread lowerThread = new Thread(quickSort);
                 Thread upperThread = new Thread(quickSort);
                 lowerThread.Start(new Range { Array = arr, Lower = lower, Upper = pivot - 1 });
                 upperThread.Start( new Range{ Array = arr, Lower = pivot+1, Upper = upper});
                 lowerThread.Join();
                 upperThread.Join();
-                /*lock (lockObject)
-                {
-                    System.Console.Write("End sort of " + lower + "->" + upper + ": ");
-                    printArray(arr, upper, lower);
-                    System.Console.WriteLine(" ");
-                    Console.ResetColor();
-                }*/
-                /*lock (lockObject)
-                {
-                    System.Console.Write("End sort of " + lower + "->" + pivot + ": ");
-                    printArray(arr, pivot, lower);
-                    System.Console.WriteLine(" ");
-                    Console.ResetColor();
-                }*/
+
                 
             }
 
         }
         public static int partition(int[] arr, int lower, int upper)
         {
-            /*lock (lockObject)
-            {
-                System.Console.Write("Begin sort of " + lower + "->" + upper + ": ");
 
-                printArray(arr, upper, lower);
-                System.Console.WriteLine(" ");
-                Console.ResetColor();
-            }*/
-            //Console.ResetColor();
             int pivotIndex = upper + (lower - upper) / 2;
             int pivotValue = arr[pivotIndex];
             lock (lockObject)
