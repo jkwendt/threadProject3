@@ -12,55 +12,82 @@ namespace threadProject3
         static Object lockObject = new Object();
         public static void Main()
         {
-          
-            int [] myArray = {21, 15, 7,37, 23, 90, 51, 87, 43, 61, 60, 27, 76, 24, 86, 3};
+            Console.WriteLine("Enter a size for an array to sort:");
+            int length = int.Parse(Console.ReadLine());
+           
+            int [] myArray = randomizer(length);
             printArray(myArray);
             Thread originalQuickSortThread = new Thread(quickSort);
-            System.Console.WriteLine("Sorting Array");
-            lock (lockObject)
-            {
-                System.Console.Write("Begin sort of " + 0 + "->" + (myArray.Length-1) + ": ");
+            
+                printArray(myArray, (myArray.Length-1), 0, false);
 
-                printArray(myArray, (myArray.Length-1), 0);
-                System.Console.WriteLine(" ");
-                Console.ResetColor();
-            }
             originalQuickSortThread.Start(new Range{Array = myArray, Lower = 0, Upper = myArray.Length-1});
             originalQuickSortThread.Join();
-            lock (lockObject)
-            {
-                System.Console.Write("End sort of " + 0 + "->" + (myArray.Length-1) + ": ");
 
-                printArray(myArray, (myArray.Length-1), 0);
-                System.Console.WriteLine(" ");
-                Console.ResetColor();
-            }
-            System.Console.WriteLine("Sorted Array");
+                printArray(myArray, (myArray.Length-1), 0, true);
+
+            System.Console.WriteLine("\nThe Sorted Array is");
             printArray(myArray);
             
 
         }
-       // public static void print()
-        public static void printArray(int[] arr, int upper, int lower)
+        public static int[] randomizer(int length)
         {
+            Random rand = new Random();
+           int[] myArray = new int[length];
 
-            for(int i = 0; i < arr.Length; i++)
+
+            for (int i = 0; i < myArray.Length; i++)
             {
-                if(i == lower)
+                int rInt = rand.Next(0, 99 + 1);
+
+                while (myArray.Contains(rInt))
                 {
-                    Console.ForegroundColor = ConsoleColor.Blue;
-                    System.Console.Write("[");
+                    rand = new Random();
+                    rInt = rand.Next(0, 99 + 1);
+
                 }
-                if(i == upper +1)
+                myArray[i] = rInt;
+
+            }
+            return myArray;
+        }
+        public static void printArray(int[] arr, int upper, int lower, bool beginEnd)
+        {
+            lock (lockObject)
+            {
+                System.Console.WriteLine(" ");
+                if(beginEnd == true)
                 {
-                    Console.ResetColor();
+                    System.Console.Write("End sort of " + lower + "->" + upper + ": ");
                 }
-                System.Console.Write(arr[i]);
-                if(i == upper)
+                if(beginEnd == false)
                 {
-                    System.Console.Write("]");
+                    System.Console.Write("Begin sort of " + lower + "->" + upper + ": ");
                 }
-                System.Console.Write(" ");
+              
+                Console.ResetColor();
+
+
+                for (int i = 0; i < arr.Length; i++)
+                {
+                    if (i == lower)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Blue;
+                        System.Console.Write("[");
+                    }
+                    if (i == upper + 1)
+                    {
+                        Console.ResetColor();
+                    }
+                    System.Console.Write(arr[i]);
+                    if (i == upper)
+                    {
+                        System.Console.Write("]");
+                    }
+                    System.Console.Write(" ");
+                }
+                Console.ResetColor();
             }
         }
         public static void printArray(int[] arr)
@@ -98,14 +125,9 @@ namespace threadProject3
 
             int pivotIndex = upper + (lower - upper) / 2;
             int pivotValue = arr[pivotIndex];
-            lock (lockObject)
-            {
-                System.Console.Write("Begin sort of " + lower + "->" + pivotIndex + ": ");
 
-                printArray(arr, pivotIndex, lower);
-                System.Console.WriteLine(" ");
-                Console.ResetColor();
-            }
+                printArray(arr, pivotIndex, lower, false);
+ 
             Swap(arr, upper, pivotIndex);
 
             int Index = lower;
@@ -120,14 +142,9 @@ namespace threadProject3
             }
 
             Swap(arr, Index, upper);
-            lock (lockObject)
-            {
-                System.Console.Write("End sort of " + lower + "->" + pivotIndex + ": ");
 
-                printArray(arr, pivotIndex, lower);
-                System.Console.WriteLine(" ");
-                Console.ResetColor();
-            }
+                printArray(arr, pivotIndex, lower, true);
+
             return Index;
         }
         public static void Swap(int[] arr, int lower, int upper)
