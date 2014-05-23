@@ -17,20 +17,33 @@ namespace threadProject3
             printArray(myArray);
             Thread originalQuickSortThread = new Thread(quickSort);
             System.Console.WriteLine("Sorting Array");
+            lock (lockObject)
+            {
+                System.Console.Write("Begin sort of " + 0 + "->" + (myArray.Length-1) + ": ");
+
+                printArray(myArray, (myArray.Length-1), 0);
+                System.Console.WriteLine(" ");
+                Console.ResetColor();
+            }
             originalQuickSortThread.Start(new Range{Array = myArray, Lower = 0, Upper = myArray.Length-1});
             originalQuickSortThread.Join();
+            lock (lockObject)
+            {
+                System.Console.Write("End sort of " + 0 + "->" + (myArray.Length-1) + ": ");
+
+                printArray(myArray, (myArray.Length-1), 0);
+                System.Console.WriteLine(" ");
+                Console.ResetColor();
+            }
             System.Console.WriteLine("Sorted Array");
             printArray(myArray);
             
 
         }
+       // public static void print()
         public static void printArray(int[] arr, int upper, int lower)
         {
-            /*foreach (int a in arr)
-            {
-                
-                System.Console.Write(a +" " );
-            }*/
+
             for(int i = 0; i < arr.Length; i++)
             {
                 if(i == lower)
@@ -66,38 +79,68 @@ namespace threadProject3
             int upper = range.Upper;
             if(lower < upper ) //echo entire array |White [blue] white|
             {
+                /*lock (lockObject)
+                {
+                    System.Console.Write("Begin sort of " + lower + "->" + upper + ": ");
+
+                    printArray(arr, upper, lower);
+                    System.Console.WriteLine(" ");
+                    Console.ResetColor();
+                }*/
                 int pivot = partition(arr, lower, upper);
+                /*lock (lockObject)
+                {
+                    System.Console.Write("Begin sort of " + lower + "->" + pivot + ": ");
+
+                    printArray(arr, pivot, lower);
+                    System.Console.WriteLine(" ");
+                    Console.ResetColor();
+                }*/
                 Thread lowerThread = new Thread(quickSort);
                 Thread upperThread = new Thread(quickSort);
                 lowerThread.Start(new Range { Array = arr, Lower = lower, Upper = pivot - 1 });
                 upperThread.Start( new Range{ Array = arr, Lower = pivot+1, Upper = upper});
                 lowerThread.Join();
                 upperThread.Join();
-                lock (lockObject)
+                /*lock (lockObject)
                 {
                     System.Console.Write("End sort of " + lower + "->" + upper + ": ");
                     printArray(arr, upper, lower);
                     System.Console.WriteLine(" ");
                     Console.ResetColor();
-                }
+                }*/
+                /*lock (lockObject)
+                {
+                    System.Console.Write("End sort of " + lower + "->" + pivot + ": ");
+                    printArray(arr, pivot, lower);
+                    System.Console.WriteLine(" ");
+                    Console.ResetColor();
+                }*/
                 
             }
 
         }
         public static int partition(int[] arr, int lower, int upper)
         {
-            lock (lockObject)
+            /*lock (lockObject)
             {
                 System.Console.Write("Begin sort of " + lower + "->" + upper + ": ");
-                
+
                 printArray(arr, upper, lower);
                 System.Console.WriteLine(" ");
                 Console.ResetColor();
-            }
-            Console.ResetColor();
-            int pivotIndex = (lower + upper) / 2;
+            }*/
+            //Console.ResetColor();
+            int pivotIndex = upper + (lower - upper) / 2;
             int pivotValue = arr[pivotIndex];
+            lock (lockObject)
+            {
+                System.Console.Write("Begin sort of " + lower + "->" + pivotIndex + ": ");
 
+                printArray(arr, pivotIndex, lower);
+                System.Console.WriteLine(" ");
+                Console.ResetColor();
+            }
             Swap(arr, upper, pivotIndex);
 
             int Index = lower;
@@ -112,13 +155,23 @@ namespace threadProject3
             }
 
             Swap(arr, Index, upper);
+            lock (lockObject)
+            {
+                System.Console.Write("End sort of " + lower + "->" + pivotIndex + ": ");
+
+                printArray(arr, pivotIndex, lower);
+                System.Console.WriteLine(" ");
+                Console.ResetColor();
+            }
             return Index;
         }
-        public static void Swap(int[] ints, int x, int y)
+        public static void Swap(int[] arr, int lower, int upper)
         {
-            int temp = ints[x];
-            ints[x] = ints[y];
-            ints[y] = temp;
+
+            int temp = arr[lower];
+            arr[lower] = arr[upper];
+            arr[upper] = temp;
+          
         }
     }
     class Range
